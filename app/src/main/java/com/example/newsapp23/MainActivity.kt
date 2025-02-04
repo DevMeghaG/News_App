@@ -33,6 +33,7 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     innerPadding
                     // News(title = "",imageUrl = "",desp = "")
+
                     NavHostController(VM)
 // HomeScreen(viewModel = viewModel)
 

@@ -1,7 +1,5 @@
 package com.example.newsapp23.Ui_Layer.tab_Layout
 
-
-
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -24,10 +21,8 @@ import com.example.newsapp23.Ui_Layer.Home_Screen.NewsList
 import com.example.newsapp23.Ui_Layer.View_Model.viewModel
 
 
-
-
 @Composable
-fun TabLayout(VM: viewModel,navController: NavController) {
+fun TabLayout(VM: viewModel, navController: NavController) {
     val tabItemsList=
         listOf(
             TabItem(
@@ -45,7 +40,8 @@ fun TabLayout(VM: viewModel,navController: NavController) {
                 selectedColor = Color.Gray,
                 unselectedColor = Color.Black
             ),
-        )
+
+            )
     var selectedTabIndex by remember {
         mutableIntStateOf(0) }
     val pageState =rememberPagerState{tabItemsList.size}
@@ -63,7 +59,14 @@ fun TabLayout(VM: viewModel,navController: NavController) {
         TabRow(contentColor =Color.Black,
             selectedTabIndex = selectedTabIndex) {
             tabItemsList.forEachIndexed { index, tabItem ->
-                Tab(selected = selectedTabIndex == index, onClick = { selectedTabIndex = index }) {
+                Tab(selected = selectedTabIndex == index, onClick = { selectedTabIndex = index
+                    var category = when(tabItemsList[index].title){
+                        "Sports" -> "sports"
+                        "Technology" -> "technology"
+                        else -> null
+                    }
+                    VM.getTopNews(category, null)
+                }) {
                     Text(
                         text = "${tabItemsList[index].title}",
                         color = if(selectedTabIndex == index)
@@ -76,19 +79,9 @@ fun TabLayout(VM: viewModel,navController: NavController) {
         }
         HorizontalPager(state = pageState) {index->
             Box(modifier = Modifier.fillMaxSize()){
-                var category = when(tabItemsList[index].title){
-                    "Technology" -> "technology"
-                    "Sports" -> "sports"
-                    else -> null
-                }
-                LaunchedEffect(key1 = Unit) {
-                   VM.getTopNews(category)
-
-                }
                 NewsList(VM = VM, navController = navController)
             }
-
         }
     }
-
 }
+

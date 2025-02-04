@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 
-
 import com.example.newsapp23.model.NewsModel
 import com.example.newsapp23.remote.ApiBuilder
 import kotlinx.coroutines.launch
@@ -17,10 +16,10 @@ class viewModel:ViewModel() {
 
     var data = mutableStateOf<NewsModel?>(null)
 
-    fun getTopNews(category: String?){
-        viewModelScope.launch {
 
-            data.value =  ApiBuilder.provideApi().getTopHeadlines()
+    fun getTopNews(category: String?, nothing: Nothing?){
+        viewModelScope.launch {
+            data.value =  ApiBuilder.provideApi().getCategoryNews(category = category)
         }
     }
     fun formatDate(isoDate: String): String {
@@ -30,6 +29,7 @@ class viewModel:ViewModel() {
         val date = inputFormat.parse(isoDate)
         return date?.let { outputFormat.format(it) } ?: "Invalid Date"
     }
-
-
+    init {
+        getTopNews(null,null)
+    }
 }
